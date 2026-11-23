@@ -1,0 +1,10 @@
+__pycache__
+*.py[cod]
+.git
+.gitignore
+.vercel
+images/
+download_kaggle_dataset.py
+static/uploads/*.jpg
+static/uploads/*.avif
+!static/uploads/.gitkeep

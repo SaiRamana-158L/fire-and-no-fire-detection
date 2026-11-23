@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.vercel/
+static/uploads/*.jpg
+static/uploads/*.avif
+!static/uploads/.gitkeep
+.env
+.env.local
