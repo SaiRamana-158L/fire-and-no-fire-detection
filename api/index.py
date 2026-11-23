@@ -11,18 +11,13 @@ from app import app
 
 class VercelPathCorrectionMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        # Read matched path from Vercel header if present
-        matched_path = request.headers.get("x-matched-path")
-        if matched_path and not matched_path.startswith("/api/index"):
-            request.scope["path"] = matched_path
-        else:
-            path = request.scope.get("path", "")
-            if path in ("/api/index.py", "/api/index", "/api"):
-                request.scope["path"] = "/"
-            elif path.startswith("/api/index.py/"):
-                request.scope["path"] = path.replace("/api/index.py", "", 1)
-            elif path.startswith("/api/index/"):
-                request.scope["path"] = path.replace("/api/index", "", 1)
+        path = request.scope.get("path", "")
+        if path.startswith("/api/index.py"):
+            subpath = path[len("/api/index.py"):]
+            request.scope["path"] = "/" if not subpath else subpath
+        elif path.startswith("/api/index"):
+            subpath = path[len("/api/index"):]
+            request.scope["path"] = "/" if not subpath else subpath
         return await call_next(request)
 
 app.add_middleware(VercelPathCorrectionMiddleware)

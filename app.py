@@ -208,8 +208,6 @@ def compute_fire_heuristics(img_bgr, file_hint=""):
 
 @app.get("/", response_class=HTMLResponse)
 @app.get("/api", response_class=HTMLResponse)
-@app.get("/api/index", response_class=HTMLResponse)
-@app.get("/api/index.py", response_class=HTMLResponse)
 async def serve_index():
     index_file = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index_file):
