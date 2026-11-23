@@ -207,6 +207,9 @@ def compute_fire_heuristics(img_bgr, file_hint=""):
     return prob_fire, prob_nofire, overlay, fire_ratio, smoke_ratio
 
 @app.get("/", response_class=HTMLResponse)
+@app.get("/api", response_class=HTMLResponse)
+@app.get("/api/index", response_class=HTMLResponse)
+@app.get("/api/index.py", response_class=HTMLResponse)
 async def serve_index():
     index_file = os.path.join(STATIC_DIR, "index.html")
     if os.path.exists(index_file):
@@ -215,6 +218,7 @@ async def serve_index():
     return HTMLResponse("<h1>Dashboard Loading...</h1>")
 
 @app.get("/api/metrics")
+@app.get("/metrics")
 async def get_metrics():
     return {
         "models": MODEL_METRICS,
@@ -222,6 +226,7 @@ async def get_metrics():
     }
 
 @app.get("/api/samples")
+@app.get("/samples")
 async def get_samples():
     fire_files = [f"/static/dataset/fire/{f}" for f in os.listdir(DATASET_FIRE_DIR) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
     nofire_files = [f"/static/dataset/no_fire/{f}" for f in os.listdir(DATASET_NOFIRE_DIR) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
@@ -241,6 +246,7 @@ def decode_image_bytes(contents: bytes):
         return cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
 @app.post("/api/preprocess")
+@app.post("/preprocess")
 async def preprocess_image(
     request: Request,
     file: UploadFile = File(None),
@@ -350,6 +356,7 @@ async def preprocess_image(
         return JSONResponse(status_code=500, content={"error": str(e)})
 
 @app.post("/api/predict")
+@app.post("/predict")
 async def predict_fire(
     request: Request,
     file: UploadFile = File(None),
